@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    image: discord-bot:latest
+    restart: always
+    env_file:
+    - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      CRUD_FASTAPI_HOST: 0.0.0.0
+      CRUD_FASTAPI_DB_HOST: discord-bot
+      CRUD_FASTAPI_DB_PORT: 5432
+      CRUD_FASTAPI_DB_USER: george
+      CRUD_FASTAPI_DB_PASS: pass
+      CRUD_FASTAPI_DB_BASE: discord-bot
+
+  db:
+    image: postgres:14
+    hostname: discord-bot-db
+    ports:
+      # Exposes application port.
+    - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: ${CRUD_FASTAPI_DB_PASS}
+      POSTGRES_USER: ${CRUD_FASTAPI_DB_USER}
+      POSTGRES_DB: ${CRUD_FASTAPI_DB_BASE}
+    # volumes:
+    # - crud-fastapi-db-data:/var/lib/postgresql/data
+    restart: always
+    healthcheck:
+      test: pg_isready -U ${CRUD_FASTAPI_DB_USER}
+      interval: 2s
+      timeout: 3s
+      retries: 40
+
+
+
+# volumes:
+#   crud-fastapi-db-data:
+#     name: crud-fastapi-db-data
