@@ -93,7 +93,7 @@ class Owner(commands.Cog, name="owner"):
         )
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="load",
         description="Load a cog",
     )
@@ -119,7 +119,7 @@ class Owner(commands.Cog, name="owner"):
         )
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="unload",
         description="Unloads a cog.",
     )
@@ -145,7 +145,7 @@ class Owner(commands.Cog, name="owner"):
         )
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="reload",
         description="Reloads a cog.",
     )
@@ -171,7 +171,7 @@ class Owner(commands.Cog, name="owner"):
         )
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="shutdown",
         description="Make the bot shutdown.",
     )
@@ -186,7 +186,7 @@ class Owner(commands.Cog, name="owner"):
         await context.send(embed=embed)
         await self.bot.close()
 
-    @commands.hybrid_command(
+    @commands.command(
         name="say",
         description="The bot will say anything you want.",
     )
@@ -201,7 +201,7 @@ class Owner(commands.Cog, name="owner"):
         """
         await context.send(message)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="embed",
         description="The bot will say anything you want, but within embeds.",
     )
@@ -330,4 +330,5 @@ class Owner(commands.Cog, name="owner"):
 
 
 async def setup(bot):
-    await bot.add_cog(Owner(bot))
+    pass
+    # await bot.add_cog(Owner(bot))

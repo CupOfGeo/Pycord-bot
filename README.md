@@ -107,6 +107,42 @@ After that you can start it with
 python bot.py
 ```
 
+## Build & Run with docker
+
+```sh
+docker build -t {my_bot} .
+```
+
+run the container and remove it on exit
+```sh 
+docker run  --name {my_bot_instance} --rm {my_bot}
+```
+
+## Deploy to GCP Compute Engine
+Why compute engine well discord bots run on websockets and need a constant connection so we cant just deploy them to heroku or cloud functions.
+
+1) Sign-up if you don't have an account already you will get $300 of credits but the small server we will spin up will be very cheap 
+https://cloud.google.com/free
+
+2) Create a new project: Once you've signed up and are on the GCP console, create a new project by clicking on the project dropdown on the header bar and then click on 'New Project'. Enter a name for your project and click 'Create'.
+
+3) Enable Compute Engine API: Once your project is created, go to the Navigation Menu (hamburger icon on the top left), scroll down to 'APIs & Services' and click on 'Library'. In the library search for 'Compute Engine API' and enable it for your project.
+
+4) Create a new Compute Engine instance: Go to the Navigation Menu again, scroll down to 'Compute Engine' and click on 'VM instances'. Click 'Create Instance'. Here you can specify the details for your instance. Choose the 'f1-micro' machine type (under the 'Machine configuration' section), select the region and zone of your choice, and choose the boot disk (for a basic setup, you can choose the Debian or Ubuntu OS). Leave the other options as their defaults.
+
+if you use a spot instance its $2.83 for an E2 micro per month but the spot instance will go down.
+Other wise its $7.11 for standard If you are using the $300 in free credits spluge on the standard as they only last 3 months (just be sure to turn it off or change it if you dont want to be spending that money after your credits exspier)
+
+
+5) Set up your instance: Once your instance is created and running, you can set it up. Click the SSH button on your VM instances list to open a new browser window with a command-line interface to your new instance. From here, you can install any software you need (like Node.js, Python, etc.), clone your application from a git repository, install dependencies, etc.
+
+Configure firewall rules: If your application needs to be accessible from the internet (e.g., a web server), you'll need to set up a firewall rule to allow traffic to your application. From the VM instance details page, click on the 'Edit' button and scroll down to 'Network interfaces'. Click on the name of your network interface, which will take you to the 'VPC network details' page. Scroll down to 'Firewall rules' and click 'Add firewall rule'. Give your firewall rule a name, leave 'Ingress' selected, and allow traffic from 'IP ranges' and enter '0.0.0.0/0'. Under 'Protocols and ports', you can specify which ports your application uses (for a web server, this is typically TCP port 80 or 443 for HTTPS). Click 'Create' to create your firewall rule.
+
+Run your application: Back in your SSH window, you can now start your application. How to do this will depend on what your application is and how it's configured.
+
+Keep your app running: If you want your app to stay running even after you close your SSH session, you may want to look into using a process manager like pm2 for Node.js applications or screen or tmux for more general use.
+
+
 > **Note** You may need to replace `python` with `py`, `python3`, `python3.11`, etc. depending on what Python versions you have installed on the machine.
 
 ## Issues or Questions

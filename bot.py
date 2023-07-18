@@ -70,7 +70,7 @@ If you want to use prefix commands, make sure to also enable the intent below in
 """
 # intents.message_content = True
 
-bot = Bot(
+bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(config["prefix"]),
     intents=intents,
     help_command=None,
@@ -156,7 +156,7 @@ async def on_ready() -> None:
     The code in this event is executed when the bot is ready.
     """
     bot.logger.info(f"Logged in as {bot.user.name}")
-    bot.logger.info(f"discord.py API version: {discord.__version__}")
+    bot.logger.info(f"pycord API version: {discord.__version__}")
     bot.logger.info(f"Python version: {platform.python_version()}")
     bot.logger.info(f"Running on: {platform.system()} {platform.release()} ({os.name})")
     bot.logger.info("-------------------")
@@ -184,6 +184,7 @@ async def on_message(message: discord.Message) -> None:
     """
     if message.author == bot.user or message.author.bot:
         return
+    
     await bot.process_commands(message)
 
 
@@ -293,11 +294,13 @@ async def load_cogs() -> None:
         if file.endswith(".py"):
             extension = file[:-3]
             try:
-                await bot.load_extension(f"cogs.{extension}")
+                bot.load_extension(f"cogs.{extension}")
                 bot.logger.info(f"Loaded extension '{extension}'")
             except Exception as e:
                 exception = f"{type(e).__name__}: {e}"
                 bot.logger.error(f"Failed to load extension {extension}\n{exception}")
+            print(bot.get_cog('fun'))
+            print('fuck')
 
 
 asyncio.run(init_db())

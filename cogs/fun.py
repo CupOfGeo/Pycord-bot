@@ -11,7 +11,6 @@ import random
 import aiohttp
 import discord
 from discord.ext import commands
-from discord.ext.commands import Context
 
 from helpers import checks
 
@@ -103,9 +102,9 @@ class Fun(commands.Cog, name="fun"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(name="randomfact", description="Get a random fact.")
+    @commands.slash_command(name="randomfact", description="Get a random fact.")
     @checks.not_blacklisted()
-    async def randomfact(self, context: Context) -> None:
+    async def randomfact(self, context: discord.ApplicationContext) -> None:
         """
         Get a random fact.
 
@@ -127,11 +126,11 @@ class Fun(commands.Cog, name="fun"):
                     )
                 await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="coinflip", description="Make a coin flip, but give your bet before."
     )
     @checks.not_blacklisted()
-    async def coinflip(self, context: Context) -> None:
+    async def coinflip(self, context: discord.ApplicationContext) -> None:
         """
         Make a coin flip, but give your bet before.
 
@@ -154,11 +153,11 @@ class Fun(commands.Cog, name="fun"):
             )
         await message.edit(embed=embed, view=None, content=None)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="rps", description="Play the rock paper scissors game against the bot."
     )
     @checks.not_blacklisted()
-    async def rock_paper_scissors(self, context: Context) -> None:
+    async def rock_paper_scissors(self, context: discord.ApplicationContext) -> None:
         """
         Play the rock paper scissors game against the bot.
 

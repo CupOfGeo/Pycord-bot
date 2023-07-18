@@ -18,7 +18,7 @@ class Moderation(commands.Cog, name="moderation"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(
+    @commands.command(
         name="kick",
         description="Kick a user out of the server.",
     )
@@ -70,7 +70,7 @@ class Moderation(commands.Cog, name="moderation"):
                 )
                 await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="nick",
         description="Change the nickname of a user on a server.",
     )
@@ -108,7 +108,7 @@ class Moderation(commands.Cog, name="moderation"):
             )
             await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="ban",
         description="Bans a user from the server.",
     )
@@ -277,7 +277,7 @@ class Moderation(commands.Cog, name="moderation"):
         embed.description = description
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="purge",
         description="Delete a number of messages.",
     )
@@ -302,7 +302,7 @@ class Moderation(commands.Cog, name="moderation"):
         )
         await context.channel.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="hackban",
         description="Bans a user without the user having to be in the server.",
     )
@@ -343,4 +343,5 @@ class Moderation(commands.Cog, name="moderation"):
 
 
 async def setup(bot):
-    await bot.add_cog(Moderation(bot))
+    pass
+    # await bot.add_cog(Moderation(bot))

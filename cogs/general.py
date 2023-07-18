@@ -11,7 +11,7 @@ import random
 
 import aiohttp
 import discord
-from discord import app_commands
+# from discord import app_commands
 from discord.ext import commands
 from discord.ext.commands import Context
 
@@ -22,7 +22,7 @@ class General(commands.Cog, name="general"):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.hybrid_command(
+    @commands.command(
         name="help", description="List all commands the bot has loaded."
     )
     @checks.not_blacklisted()
@@ -44,7 +44,7 @@ class General(commands.Cog, name="general"):
             )
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="botinfo",
         description="Get some useful (or not) information about the bot.",
     )
@@ -72,7 +72,7 @@ class General(commands.Cog, name="general"):
         embed.set_footer(text=f"Requested by {context.author}")
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="serverinfo",
         description="Get some useful (or not) information about the server.",
     )
@@ -103,7 +103,7 @@ class General(commands.Cog, name="general"):
         embed.set_footer(text=f"Created at: {context.guild.created_at}")
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="ping",
         description="Check if the bot is alive.",
     )
@@ -121,7 +121,7 @@ class General(commands.Cog, name="general"):
         )
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="invite",
         description="Get the invite link of the bot to be able to invite it.",
     )
@@ -143,7 +143,7 @@ class General(commands.Cog, name="general"):
         except discord.Forbidden:
             await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="server",
         description="Get the invite link of the discord server of the bot for some support.",
     )
@@ -164,12 +164,12 @@ class General(commands.Cog, name="general"):
         except discord.Forbidden:
             await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="8ball",
         description="Ask any question to the bot.",
     )
     @checks.not_blacklisted()
-    @app_commands.describe(question="The question you want to ask.")
+    # @app_commands.describe(question="The question you want to ask.")
     async def eight_ball(self, context: Context, *, question: str) -> None:
         """
         Ask any question to the bot.
@@ -207,7 +207,7 @@ class General(commands.Cog, name="general"):
         embed.set_footer(text=f"The question was: {question}")
         await context.send(embed=embed)
 
-    @commands.hybrid_command(
+    @commands.command(
         name="bitcoin",
         description="Get the current price of bitcoin.",
     )
