@@ -305,4 +305,7 @@ async def load_cogs() -> None:
 
 asyncio.run(init_db())
 asyncio.run(load_cogs())
+if not discord.opus.is_loaded():
+    discord.opus.load_opus('/opt/homebrew/opt/opus/lib/libopus.0.dylib') 
 bot.run(config["token"])
+

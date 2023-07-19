@@ -23,10 +23,8 @@ class Me(commands.Cog, name="me"):
         voice_channel = await channel.connect()
         
         await asyncio.sleep(1)
-        if not discord.opus.is_loaded():
-            discord.opus.load_opus("/home/linuxbrew/.linuxbrew/lib/libopus.so.0") 
         # Start playing the audio file
-        ctx.voice_client.play(discord.FFmpegPCMAudio(executable="ffmpeg", source="/workspaces/Python-Discord-Bot-Template/Hello.mp3"))
+        ctx.voice_client.play(discord.FFmpegPCMAudio(executable="ffmpeg", source="Hello.mp3"))
         
 
         
