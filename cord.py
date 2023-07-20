@@ -112,5 +112,3 @@ async def leave(ctx: discord.ApplicationContext):
 
     await ctx.respond("Left!")
 
-
-bot.run("MTEzMDIxMjQ5Nzk5MTkzODE1OQ.G5pq3m.cXH0cOW4KcZIBj_wEjrjELldd9sbqYvb8l-gYU")

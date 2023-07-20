@@ -13,7 +13,8 @@ import aiohttp
 import discord
 # from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
+# from discord.ext.commands import Context
+from discord import ApplicationContext as Context
 
 from helpers import checks
 
@@ -23,10 +24,10 @@ class General(commands.Cog, name="general"):
         self.bot = bot
 
     @commands.command(
-        name="help", description="List all commands the bot has loaded."
+        name="list_commands", description="List all commands the bot has loaded."
     )
     @checks.not_blacklisted()
-    async def help(self, context: Context) -> None:
+    async def list_commands(self, context: Context) -> None:
         prefix = self.bot.config["prefix"]
         embed = discord.Embed(
             title="Help", description="List of available commands:", color=0x9C84EF

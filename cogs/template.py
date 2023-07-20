@@ -7,7 +7,7 @@ Version: 5.5.0
 """
 
 from discord.ext import commands
-from discord.ext.commands import Context
+from discord import ApplicationContext as Context
 
 from helpers import checks
 

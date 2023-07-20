@@ -7,9 +7,8 @@ Version: 5.5.0
 """
 
 import discord
-from discord import app_commands
 from discord.ext import commands
-from discord.ext.commands import Context
+from discord import ApplicationContext as Context
 
 from helpers import checks, db_manager
 
@@ -22,7 +21,7 @@ class Owner(commands.Cog, name="owner"):
         name="sync",
         description="Synchonizes the slash commands.",
     )
-    @app_commands.describe(scope="The scope of the sync. Can be `global` or `guild`")
+    # @app_commands.describe(scope="The scope of the sync. Can be `global` or `guild`")
     @checks.is_owner()
     async def sync(self, context: Context, scope: str) -> None:
         """
@@ -58,9 +57,9 @@ class Owner(commands.Cog, name="owner"):
         name="unsync",
         description="Unsynchonizes the slash commands.",
     )
-    @app_commands.describe(
-        scope="The scope of the sync. Can be `global`, `current_guild` or `guild`"
-    )
+    # @app_commands.describe(
+    #     scope="The scope of the sync. Can be `global`, `current_guild` or `guild`"
+    # )
     @checks.is_owner()
     async def unsync(self, context: Context, scope: str) -> None:
         """
@@ -97,7 +96,7 @@ class Owner(commands.Cog, name="owner"):
         name="load",
         description="Load a cog",
     )
-    @app_commands.describe(cog="The name of the cog to load")
+    # @app_commands.describe(cog="The name of the cog to load")
     @checks.is_owner()
     async def load(self, context: Context, cog: str) -> None:
         """
@@ -123,7 +122,7 @@ class Owner(commands.Cog, name="owner"):
         name="unload",
         description="Unloads a cog.",
     )
-    @app_commands.describe(cog="The name of the cog to unload")
+    # @app_commands.describe(cog="The name of the cog to unload")
     @checks.is_owner()
     async def unload(self, context: Context, cog: str) -> None:
         """
@@ -149,7 +148,7 @@ class Owner(commands.Cog, name="owner"):
         name="reload",
         description="Reloads a cog.",
     )
-    @app_commands.describe(cog="The name of the cog to reload")
+    # @app_commands.describe(cog="The name of the cog to reload")
     @checks.is_owner()
     async def reload(self, context: Context, cog: str) -> None:
         """
@@ -190,7 +189,7 @@ class Owner(commands.Cog, name="owner"):
         name="say",
         description="The bot will say anything you want.",
     )
-    @app_commands.describe(message="The message that should be repeated by the bot")
+    # @app_commands.describe(message="The message that should be repeated by the bot")
     @checks.is_owner()
     async def say(self, context: Context, *, message: str) -> None:
         """
@@ -205,7 +204,7 @@ class Owner(commands.Cog, name="owner"):
         name="embed",
         description="The bot will say anything you want, but within embeds.",
     )
-    @app_commands.describe(message="The message that should be repeated by the bot")
+    # @app_commands.describe(message="The message that should be repeated by the bot")
     @checks.is_owner()
     async def embed(self, context: Context, *, message: str) -> None:
         """
@@ -270,7 +269,7 @@ class Owner(commands.Cog, name="owner"):
         name="add",
         description="Lets you add a user from not being able to use the bot.",
     )
-    @app_commands.describe(user="The user that should be added to the blacklist")
+    # @app_commands.describe(user="The user that should be added to the blacklist")
     @checks.is_owner()
     async def blacklist_add(self, context: Context, user: discord.User) -> None:
         """
@@ -302,7 +301,7 @@ class Owner(commands.Cog, name="owner"):
         name="remove",
         description="Lets you remove a user from not being able to use the bot.",
     )
-    @app_commands.describe(user="The user that should be removed from the blacklist.")
+    # @app_commands.describe(user="The user that should be removed from the blacklist.")
     @checks.is_owner()
     async def blacklist_remove(self, context: Context, user: discord.User) -> None:
         """
@@ -330,5 +329,4 @@ class Owner(commands.Cog, name="owner"):
 
 
 async def setup(bot):
-    pass
-    # await bot.add_cog(Owner(bot))
+    await bot.add_cog(Owner(bot))

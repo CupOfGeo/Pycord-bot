@@ -17,7 +17,6 @@ import sys
 import aiosqlite
 import discord
 from discord.ext import commands, tasks
-from discord.ext.commands import Bot, Context
 
 import exceptions
 
@@ -73,7 +72,7 @@ If you want to use prefix commands, make sure to also enable the intent below in
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(config["prefix"]),
     intents=intents,
-    help_command=None,
+    help_command=commands.DefaultHelpCommand()
 )
 
 # Setup both of the loggers
@@ -189,7 +188,7 @@ async def on_message(message: discord.Message) -> None:
 
 
 @bot.event
-async def on_command_completion(context: Context) -> None:
+async def on_command_completion(context: discord.ApplicationContext) -> None:
     """
     The code in this event is executed every time a normal command has been *successfully* executed.
 
@@ -209,7 +208,7 @@ async def on_command_completion(context: Context) -> None:
 
 
 @bot.event
-async def on_command_error(context: Context, error) -> None:
+async def on_command_error(context: discord.ApplicationContext, error) -> None:
     """
     The code in this event is executed every time a normal valid command catches an error.
 
@@ -294,18 +293,17 @@ async def load_cogs() -> None:
         if file.endswith(".py"):
             extension = file[:-3]
             try:
+                bot.logger.info(f"Loading extension '{extension}'")
                 bot.load_extension(f"cogs.{extension}")
                 bot.logger.info(f"Loaded extension '{extension}'")
             except Exception as e:
                 exception = f"{type(e).__name__}: {e}"
                 bot.logger.error(f"Failed to load extension {extension}\n{exception}")
-            print(bot.get_cog('fun'))
-            print('fuck')
 
 
 asyncio.run(init_db())
 asyncio.run(load_cogs())
 if not discord.opus.is_loaded():
     discord.opus.load_opus('/opt/homebrew/opt/opus/lib/libopus.0.dylib') 
+    # this will be an issue when running on compute engine.
 bot.run(config["token"])
-
