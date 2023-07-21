@@ -1,21 +1,21 @@
-import aiohttp
 import asyncio
 import discord
 from discord.ext import commands
 import io
 import pydub  # pip install pydub==0.25.1
 from discord.sinks import MP3Sink
-
-from helpers import checks
+import copy
+# from helpers import checks
 
 
 async def finished_callback(sink: MP3Sink, channel: discord.TextChannel):
     mention_strs = []
-    audio_segs: list[pydub.AudioSegment] = []
+    audio_segments: list[pydub.AudioSegment] = []
     files: list[discord.File] = []
 
     longest = pydub.AudioSegment.empty()
 
+    # each user has its own audio file but we merge them all together 
     for user_id, audio in sink.audio_data.items():
         mention_strs.append(f"<@{user_id}>")
 
@@ -23,15 +23,15 @@ async def finished_callback(sink: MP3Sink, channel: discord.TextChannel):
 
         # Determine the longest audio segment
         if len(seg) > len(longest):
-            audio_segs.append(longest)
+            audio_segments.append(longest)
             longest = seg
         else:
-            audio_segs.append(seg)
+            audio_segments.append(seg)
 
         audio.file.seek(0)
         files.append(discord.File(audio.file, filename=f"{user_id}.mp3"))
 
-    for seg in audio_segs:
+    for seg in audio_segments:
         longest = longest.overlay(seg)
 
     with io.BytesIO() as f:
@@ -45,47 +45,16 @@ async def finished_callback(sink: MP3Sink, channel: discord.TextChannel):
 class Me(commands.Cog, name="me"):
     def __init__(self, bot):
         self.bot = bot
+        # self.sink = MP3Sink()
+        self.send_audio_task = None
 
-    @commands.command()  # Create a slash command for the supplied guilds.
-    async def hellome(self, ctx: discord.ApplicationContext):
-        await ctx.send("Hi, this is a slash command from a cog!")
-
-    @commands.command(name="joinme", description="join VC")
-    async def hello(self, ctx: discord.ApplicationContext):
-        channel = ctx.message.author.voice.channel
-        if not channel:
-            await ctx.send("You are not connected to a voice channel")
-            return
-        # voice_channel =
-        await channel.connect()
-        await asyncio.sleep(1)
-        # Start playing the audio file
-        ctx.voice_client.play(discord.FFmpegPCMAudio(executable="ffmpeg", source="Hello.mp3"))
-        return
-  
-    @commands.command(name="dummy", description="Get dummy")
-    @checks.not_blacklisted()
-    async def randomfact(self, context: discord.ApplicationContext) -> None:
-        """
-        Get a dummy
-
-        :param context: The hybrid command context.
-        """
-        # This will prevent your bot from stopping everything when doing a web request - see: https://discordpy.readthedocs.io/en/stable/faq.html#how-do-i-make-a-web-request
-        async with aiohttp.ClientSession() as session:
-            async with session.get(
-                "https://georges-playground.com/api/dummy/?limit=10&offset=0"
-            ) as request:
-                if request.status == 200:
-                    data = await request.json()
-                    embed = discord.Embed(description=data["text"], color=0xD75BF4)
-                else:
-                    embed = discord.Embed(
-                        title="Error!",
-                        description="There is something wrong with the API, please try again later",
-                        color=0xE02B2B,
-                    )
-                await context.send(embed=embed)
+    async def send_audio_to_channel(self, channel: discord.TextChannel, vc):
+        while True:
+            await asyncio.sleep(3)  # Adjust the interval as needed
+            await channel.send("3 secs")
+            vc.stop_recording()
+            await channel.send("sending to whisper")  # doesn't work without this?
+            vc.start_recording(MP3Sink(), finished_callback, channel)
 
     @commands.command()
     async def join(self, ctx: discord.ApplicationContext):
@@ -96,11 +65,15 @@ class Me(commands.Cog, name="me"):
             return await ctx.send("You're not in a vc right now")
 
         await voice.channel.connect()
+        await asyncio.sleep(1)
+        # Start playing the audio file
+        ctx.voice_client.play(discord.FFmpegPCMAudio(executable="ffmpeg", source="Hello.mp3"))
 
         await ctx.send("Joined!")
 
     @commands.command()
     async def start(self, ctx: discord.ApplicationContext):
+        await self.join(ctx)
         """Record the voice channel!"""
         voice = ctx.author.voice
 
@@ -120,6 +93,11 @@ class Me(commands.Cog, name="me"):
             ctx.channel,
             # sync_start=True,  # WARNING: This feature is very unstable and may break at any time.
         )
+
+        if self.send_audio_task is None:
+            self.send_audio_task = asyncio.create_task(
+                self.send_audio_to_channel(ctx.channel, vc)
+            )
 
         await ctx.send("The recording has started!")
 
