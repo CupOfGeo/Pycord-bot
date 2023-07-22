@@ -4,7 +4,6 @@ from discord.ext import commands
 import io
 import pydub  # pip install pydub==0.25.1
 from discord.sinks import MP3Sink
-import copy
 # from helpers import checks
 
 
@@ -15,7 +14,7 @@ async def finished_callback(sink: MP3Sink, channel: discord.TextChannel):
 
     longest = pydub.AudioSegment.empty()
 
-    # each user has its own audio file but we merge them all together 
+    # each user has its own audio file but we merge them all together.
     for user_id, audio in sink.audio_data.items():
         mention_strs.append(f"<@{user_id}>")
 
